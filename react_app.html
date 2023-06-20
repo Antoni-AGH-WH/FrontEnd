@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Add New Students to the List</title>
+    <link rel="stylesheet" href="react_app.css" />
+    <script src="react_app.jsx"></script>
+  </head>
+  <body>
+    <h1>HTTP Request</h1>
+    <form>
+      <div>
+        <label for="firstname">First Name:</label>
+        <input type="text" name="firstname" id="first_name" />
+      </div>
+      <div>
+        <label for="lastname">Last Name:</label>
+        <input type="text" name="lastname" id="last_name" />
+      </div>
+      <!-- <input type="submit" value="Submit" /> -->
+      <div>
+        <label for="studentid">Student ID:</label>
+        <input type="text" name="studentid" id="id" />
+      </div>
+      <!-- <input type="submit" value="Submit" /> -->
+      <div>
+        <label for="realid">Real ID:</label>
+        <input type="text" name="realid" id="real_id" />
+      </div>
+      <!-- <input type="submit" value="Submit" /> -->
+    </form>
+    <button id="requestButton">Create a New Student</button>
+    <div id="STUDENTS"></div>
+
+    <script>
+      // Attach a click event listener to the button
+      document
+        .getElementById("requestButton")
+        .addEventListener("click", function (event) {
+          event.preventDefault(); // Prevent form submission
+
+          // Create a new student object with field information
+          var student = {
+            first_name: document.getElementById("first_name").value,
+            last_name: document.getElementById("last_name").value,
+            id: document.getElementById("id").value,
+            real_id: document.getElementById("real_id").value,
+          };
+
+          // Make a POST request to the FastAPI server
+          fetch("http://localhost:8000/students/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(student),
+          })
+            .then((response) => {
+              if (response.ok) {
+                // Request was successful
+                return response.json();
+              } else {
+                // Request failed
+                throw new Error("Request failed. Status: " + response.status);
+              }
+            })
+            .then((data) => {
+              // Handle the response data
+              alert("Request successful! Response: " + JSON.stringify(data));
+            })
+            .catch((error) => {
+              // Handle any errors that occurred during the request
+              alert(error.message);
+            });
+        });
+    </script>
+  </body>
+</html>
